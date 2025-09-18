@@ -1,5 +1,17 @@
 # ECMWF C++ Stack Dependencies
 
+## How to install
+
+Call `build.sh`, by default the dependencies are installed into the current
+working directory under `deps`. This can be customized by exorting
+`INSTALL_PREFIX`.
+
+In most cases you will want to call:
+
+```bash
+INSTALL_PREFIX=~/cxx-deps ./build.sh
+```
+
 ## Dependecy Listing
 
 | Name | Source | Documentation | Version |
