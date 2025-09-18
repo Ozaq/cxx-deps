@@ -7,3 +7,6 @@
 [submodule "libaec"]
 	path = libaec
 	url = https://gitlab.dkrz.de/k202009/libaec.git
+[submodule "ecbuild"]
+	path = ecbuild
+	url = https://github.com/ecmwf/ecbuild.git
