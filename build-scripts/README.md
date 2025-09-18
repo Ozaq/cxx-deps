@@ -4,6 +4,9 @@ Add one script per dependency, this script controls build and install. Before
 calling the individual build scripts the following environment variables are
 exported for the scripts to use:
 
+`SOURCE_ROOT`
+Specifies root of where all sources are located. Use this as base when referring
+to the source location of your dependency, e.g. `src_path="SOURCE_ROOT/libfoo"`.
 
 `INSTALL\_PREFIX`
 Specifies root of the install tree, pass it on to cmake with

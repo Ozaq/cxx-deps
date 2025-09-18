@@ -1,6 +1,7 @@
 #!/bin/bash
 
-SCRIPT_DIR="./build-scripts"
+SOURCE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$SOURCE_ROOT/build-scripts"
 BUILD_ERRORS=0
 
 load_and_build() {
@@ -40,6 +41,8 @@ main() {
     else
         mkdir -p "$BUILD_PATH"
     fi
+
+    export SOURCE_ROOT="$SOURCE_ROOT"
     
     echo "Starting build process with INSTALL_PREFIX=$INSTALL_PREFIX BUILD_PATH=$BUILD_PATH"
     
