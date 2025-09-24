@@ -1,6 +1,6 @@
 # ECMWF C++ Stack Dependencies
 
-## How to install
+## How to Install for Local Development
 
 Call `build.sh`, by default the dependencies are installed into the current
 working directory under `deps`. This can be customized by exorting
@@ -11,6 +11,18 @@ In most cases you will want to call:
 ```bash
 INSTALL_PREFIX=~/cxx-deps ./build.sh
 ```
+
+## How to Use in Bundles
+
+Add `cxx-dependencies` to your bundles CMakeLists.txt
+
+```
+ecbuild_bundle( PROJECT cxx-dependencies GIT "ssh://git@github.com/ecmwf/cxx-dependencies"    BRANCH master   UPDATE RECURSIVE)
+```
+
+> [!] IMPORTANT
+> Do not omit the `RECURSIVE` in the call to `ecbuild_bundle(...)`, this
+> ensures that the `cxx-dependencies` is cloned including all submodules.
 
 ## Dependecy Listing
 
