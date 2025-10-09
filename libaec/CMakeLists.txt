@@ -1,13 +1,11 @@
-cmake_minimum_required(VERSION 3.26...3.31)
-project(libaec LANGUAGES C VERSION 1.1.4)
-
-option(BUILD_SHARED_LIBS "OFF: do not build shared libraries.  ON (default): build shared libraries" ON)
-option(BUILD_STATIC_LIBS "OFF: do not build static libraries.  ON (default): build static libraries" ON)
+cmake_minimum_required(VERSION 3.13...3.19)
+project(libaec LANGUAGES C VERSION 1.1.3)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 include(CTest)
+
 include(TestBigEndian)
 test_big_endian(WORDS_BIGENDIAN)
 
@@ -34,7 +32,7 @@ endif()
 
 # Communicate findings to code. Has to be compatible with autoconf's config.h.
 configure_file(
-  "include/config.h.in"
+  "cmake/config.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/include/config.h")
 
 # Create libaec.h with current version information
@@ -65,13 +63,37 @@ if(AEC_FUZZING)
   target_link_options(aec PUBLIC ${FUZZ_TARGET_SAN_FLAGS})
 endif()
 
-# Include the install rules if the user wanted them (included by
-# default when top-level)
+# Install the cmake files.
+set(libaec_CONFIG_IN  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/libaec-config.cmake.in)
+set(libaec_CONFIG_OUT ${CMAKE_CURRENT_BINARY_DIR}/cmake/libaec-config.cmake)
+configure_file(${libaec_CONFIG_IN} ${libaec_CONFIG_OUT} @ONLY)
+set(libaec_CONFIG_VERSION_IN  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/libaec-config-version.cmake.in)
+set(libaec_CONFIG_VERSION_OUT ${CMAKE_CURRENT_BINARY_DIR}/cmake/libaec-config-version.cmake)
+configure_file(${libaec_CONFIG_VERSION_IN} ${libaec_CONFIG_VERSION_OUT} @ONLY)
+install(FILES ${libaec_CONFIG_OUT}
+        DESTINATION cmake)
+install(FILES ${libaec_CONFIG_VERSION_OUT}
+        DESTINATION cmake)
 
-string(COMPARE
-  EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
-option(libaec_INCLUDE_PACKAGING
-  "Include packaging rules for libaec" "${is_top_level}")
-if(libaec_INCLUDE_PACKAGING)
-  add_subdirectory(packaging)
+# Cpack configuration mainly for Windows installer
+set(CPACK_PACKAGE_NAME "libaec")
+set(CPACK_PACKAGE_VENDOR "Deutsches Klimarechenzentrum GmbH")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+  "libaec - Adaptive Entropy Coding library")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "libaec")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
+
+if(WIN32)
+  set(CPACK_GENERATOR "WIX")
+  set(CPACK_WIX_UPGRADE_GUID "E58A21F6-BB99-46B5-8AD8-6114E4CCA0A6")
 endif()
+
+set(CPACK_SOURCE_IGNORE_FILES
+    /.git
+    /.*build.*
+    /*.cache
+    .*~
+    .*\#.*\#
+    \..*\#.*)
+
+include(CPack)
