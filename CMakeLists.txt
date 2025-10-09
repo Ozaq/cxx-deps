@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
-project(cxx-dependencies)
+project(cxx-dependencies VERSION 0.0.1)
 
 if(CMAKE_VERSION VERSION_LESS 3.21) 
     set(PROJECT_IS_TOP_LEVEL ${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
